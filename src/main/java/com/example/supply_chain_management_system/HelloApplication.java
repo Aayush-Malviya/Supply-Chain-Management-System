@@ -28,7 +28,6 @@ public class HelloApplication extends Application {
         gridPane.setMinSize(bodyPane.getMinWidth(), headerBar-10);
         gridPane.setVgap(5); //setting vertical gap between controls
         gridPane.setHgap(5); //setting horizontal gap between controls
-        //  gridPane.setStyle("-fx-background-color: #C0C0C0"); //setting background colour
         gridPane.setAlignment(Pos.CENTER); //to set controls to center
 
 
