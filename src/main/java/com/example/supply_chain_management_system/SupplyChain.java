@@ -18,6 +18,7 @@ import java.io.IOException;
 public class SupplyChain extends Application { //refractoring means renaming
     public static final int  width = 800, height = 600, headerBar = 50;
     Pane bodyPane = new Pane();
+    Login login = new Login();
     //Creating header bar
     private GridPane headerBar(){
         TextField searchText = new TextField();
@@ -47,7 +48,10 @@ public class SupplyChain extends Application { //refractoring means renaming
             public void handle(ActionEvent actionEvent) {
                 String email = emailTextField.getText();
                 String password = passwordField.getText();
-                messageLabel.setText(email + " $$ " + password);
+                if(login.customerLogin(email, password)==true)  //getting email & password verified from class login function
+                    messageLabel.setText("Login Successful");
+                else
+                    messageLabel.setText("Incorrect credentials");
             }
         });
 
