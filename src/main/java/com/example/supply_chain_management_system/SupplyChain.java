@@ -20,20 +20,48 @@ public class SupplyChain extends Application { //refractoring means renaming
     Pane bodyPane = new Pane();
     Login login = new Login();
     ProductDetails productDetails = new ProductDetails();
+
+    Button globalLoginButton;
+    Label customerEmailLabel = null;
+    String customerEmail = null;
     //Creating header bar
     private GridPane headerBar(){
         TextField searchText = new TextField();
         Button searchButton = new Button("Search here");
+        searchButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                String productName = searchText.getText();
+                productDetails.getProductsByName(productName);
+                //clear body & put this new pane in the body
+                bodyPane.getChildren().clear();
+                bodyPane.getChildren().add(productDetails.getProductsByName(productName));
+            }
+        });
 
+        //adding
+        globalLoginButton = new Button("Log In");
+        globalLoginButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                bodyPane.getChildren().clear();
+                bodyPane.getChildren().add(loginPage());
+                globalLoginButton.setDisable(true);
+            }
+        });
+
+        customerEmailLabel = new Label("Welcome User");
+        //adding search bar & button
         GridPane gridPane = new GridPane();
         gridPane.setMinSize(bodyPane.getMinWidth(), headerBar-10);
         gridPane.setVgap(5); //setting vertical gap between controls
         gridPane.setHgap(5); //setting horizontal gap between controls
-        gridPane.setAlignment(Pos.CENTER); //to set controls to center
-
+      //  gridPane.setAlignment(Pos.CENTER); //to set controls to center
 
         gridPane.add(searchText, 0, 0);
         gridPane.add(searchButton, 1, 0);
+        gridPane.add(globalLoginButton, 40, 0 );
+        gridPane.add(customerEmailLabel, 41, 0);
         return gridPane;
     }
     private GridPane loginPage(){
@@ -49,8 +77,14 @@ public class SupplyChain extends Application { //refractoring means renaming
             public void handle(ActionEvent actionEvent) {
                 String email = emailTextField.getText();
                 String password = passwordField.getText();
-                if(login.customerLogin(email, password)==true)  //getting email & password verified from class login function
+                if(login.customerLogin(email, password)==true){  //getting email & password verified from class login function
                     messageLabel.setText("Login Successful");
+                    customerEmail = email;
+                    globalLoginButton.setDisable(true);
+                    customerEmailLabel.setText("Welcome : " + customerEmail);
+                    bodyPane.getChildren().clear();
+                    bodyPane.getChildren().add(productDetails.getAllProducts());
+                }
                 else
                     messageLabel.setText("Incorrect credentials");
             }
