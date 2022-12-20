@@ -19,6 +19,7 @@ public class SupplyChain extends Application { //refractoring means renaming
     public static final int  width = 800, height = 600, headerBar = 50;
     Pane bodyPane = new Pane();
     Login login = new Login();
+    ProductDetails productDetails = new ProductDetails();
     //Creating header bar
     private GridPane headerBar(){
         TextField searchText = new TextField();
@@ -83,7 +84,7 @@ public class SupplyChain extends Application { //refractoring means renaming
         bodyPane.setMinSize(width, height);
         bodyPane.setTranslateY(headerBar); //to make start login page after headerBar
 
-        bodyPane.getChildren().addAll(loginPage());
+        bodyPane.getChildren().addAll(productDetails.getAllProducts());
         root.getChildren().addAll(headerBar(), bodyPane);
         return root;
     }
