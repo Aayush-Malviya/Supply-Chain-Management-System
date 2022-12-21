@@ -56,12 +56,42 @@ public class SupplyChain extends Application { //refractoring means renaming
         gridPane.setMinSize(bodyPane.getMinWidth(), headerBar-10);
         gridPane.setVgap(5); //setting vertical gap between controls
         gridPane.setHgap(5); //setting horizontal gap between controls
-      //  gridPane.setAlignment(Pos.CENTER); //to set controls to center
+        gridPane.setAlignment(Pos.CENTER); //to set controls to center
 
         gridPane.add(searchText, 0, 0);
         gridPane.add(searchButton, 1, 0);
-        gridPane.add(globalLoginButton, 40, 0 );
-        gridPane.add(customerEmailLabel, 41, 0);
+        gridPane.add(globalLoginButton, 60, 0 );
+        gridPane.add(customerEmailLabel, 61, 0);
+        return gridPane;
+    }
+
+    private GridPane footerBar(){
+
+        Button addToCartButton = new Button("Add to Cart");
+        Button buyNowButton = new Button("Buy Now");
+        Label messageLabel = new Label("");
+        buyNowButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                Product selectedProduct = productDetails.getSelectedProduct();
+                if(Order.placeOrder(customerEmail, selectedProduct)==true){
+                    messageLabel.setText("Ordered");
+                }
+                else{
+                    messageLabel.setText("Order Failed");
+                }
+            }
+        });
+
+        GridPane gridPane = new GridPane();
+        gridPane.setMinSize(bodyPane.getMinWidth(), headerBar-10);
+        gridPane.setVgap(5);
+        gridPane.setHgap(20);
+        gridPane.setAlignment(Pos.CENTER);
+        gridPane.setTranslateY(headerBar + height + 5);
+        gridPane.add(addToCartButton, 0, 0);
+        gridPane.add(buyNowButton, 1, 0);
+        gridPane.add(messageLabel,2,0);
         return gridPane;
     }
     private GridPane loginPage(){
@@ -112,14 +142,14 @@ public class SupplyChain extends Application { //refractoring means renaming
     }
     private Pane createContent(){
         Pane root = new Pane();
-        root.setPrefSize(width, height+headerBar);
+        root.setPrefSize(width, height+2*headerBar);
         //we need to add all child to the root to run
 
         bodyPane.setMinSize(width, height);
         bodyPane.setTranslateY(headerBar); //to make start login page after headerBar
 
         bodyPane.getChildren().addAll(productDetails.getAllProducts());
-        root.getChildren().addAll(headerBar(), bodyPane);
+        root.getChildren().addAll(headerBar(), bodyPane, footerBar());
         return root;
     }
     @Override
