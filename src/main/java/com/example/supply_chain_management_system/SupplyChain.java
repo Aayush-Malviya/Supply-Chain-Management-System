@@ -16,7 +16,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class SupplyChain extends Application { //refractoring means renaming
-    public static final int  width = 800, height = 600, headerBar = 50;
+    public static final int  width = 800, height = 600, headerBar = 60;
     Pane bodyPane = new Pane();
     Login login = new Login();
     ProductDetails productDetails = new ProductDetails();
@@ -40,15 +40,27 @@ public class SupplyChain extends Application { //refractoring means renaming
         });
 
         //adding
-        globalLoginButton = new Button("Log In");
+        globalLoginButton = new Button("Log In");  //login button
         globalLoginButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 bodyPane.getChildren().clear();
                 bodyPane.getChildren().add(loginPage());
-                globalLoginButton.setDisable(true);
+                globalLoginButton.setVisible(false); //hiding button
             }
         });
+
+        //---------------------------------------new code---------------------------------------------
+        Button signUpButton = new Button("Sign Up"); //sign up button
+        signUpButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                bodyPane.getChildren().clear();
+                bodyPane.getChildren().add(signUpPage());
+                signUpButton.setVisible(false);
+            }
+        });
+        //----------------------------------------new code--------------------------------------------
 
         customerEmailLabel = new Label("Welcome User");
         //adding search bar & button
@@ -62,9 +74,106 @@ public class SupplyChain extends Application { //refractoring means renaming
         gridPane.add(searchButton, 1, 0);
         gridPane.add(globalLoginButton, 60, 0 );
         gridPane.add(customerEmailLabel, 61, 0);
+        gridPane.add(signUpButton, 60,1); //new code
         return gridPane;
     }
 
+    private GridPane signUpPage(){   //new code function
+        Label emailLabel =  new Label("Email");
+        Label passwordLabel =  new Label("Password");
+        Label firstNameLabel = new Label("First Name");
+        Label lastNameLabel = new Label("Last Name");
+        Label addressLabel = new Label("Address");
+        Label mobileLabel = new Label("Mobile");
+
+        Label messageLabel = new Label("Enter Account Details..");
+        TextField emailTextField = new TextField();
+        PasswordField passwordField = new PasswordField();
+        TextField firstNameTextField = new TextField();
+        TextField lastNameTextField = new TextField();
+        TextField addressTextField = new TextField();
+        TextField mobileTextField = new TextField();
+
+        Button signUpButton = new Button("Create Account");
+        signUpButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                String email = emailTextField.getText();
+                String password = passwordField.getText();
+                String firstName = firstNameTextField.getText();
+                String lastName = lastNameTextField.getText();
+                String address = addressTextField.getText();
+                String mobile = mobileTextField.getText();
+
+                if (emailTextField.getText().isEmpty())
+                    messageLabel.setText("Email cannot be empty");
+
+                else if (passwordField.getText().isEmpty())
+                    messageLabel.setText("Password Field cannot be empty");
+
+                else if (firstNameTextField.getText().isEmpty())
+                    messageLabel.setText("Name Field cannot be empty");
+
+                else if (mobileTextField.getText().isEmpty())
+                    messageLabel.setText("Mobile number cannot be empty");
+
+                else {
+                    //entering into db
+                    DatabaseConnection databaseConnection = new DatabaseConnection();
+                    String query = String.format("INSERT INTO customer(email, password, first_name, last_name, address, mobile) VALUES('%s', '%s', '%s', '%s', '%s', '%s')", email,password, firstName, lastName, address, mobile );
+                    int rowCount = 0;
+                    try{
+                        rowCount = databaseConnection.executeUpdateQuery(query);
+                    }
+                    catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    if(rowCount != 0){
+                        messageLabel.setText("Account Created SuccessFully");
+                    }
+                    else
+                        messageLabel.setText("Email already exits");
+                }
+            };
+        });
+
+        GridPane gridPane = new GridPane();
+        gridPane.setMinSize(bodyPane.getMinWidth(), bodyPane.getMinHeight());
+        gridPane.setVgap(5); //setting vertical gap between controls
+        gridPane.setHgap(5); //setting horizontal gap between controls
+        gridPane.setStyle("-fx-background-color: #C0C0C0"); //setting background colour
+
+        gridPane.setAlignment(Pos.CENTER); //to set controls to center
+
+        //adding email box on panel
+        gridPane.add(emailLabel, 0, 0); //x, y
+        gridPane.add(emailTextField,1, 0 ); //x, y
+
+        //adding password field on panel
+        gridPane.add(passwordLabel, 0, 1); //x, y
+        gridPane.add(passwordField, 1, 1); //x, y
+
+        //adding firstName position
+        gridPane.add(firstNameLabel,0, 2);
+        gridPane.add(firstNameTextField, 1,2);
+
+        //adding lastName position
+        gridPane.add(lastNameLabel,0, 3);
+        gridPane.add(lastNameTextField, 1,3);
+
+        //adding address position
+        gridPane.add(addressLabel,0, 4);
+        gridPane.add(addressTextField, 1,4);
+
+        //adding mobile position
+        gridPane.add(mobileLabel,0, 5);
+        gridPane.add(mobileTextField, 1,5);
+
+        //adding address position
+        gridPane.add(signUpButton,0, 6);
+        gridPane.add(messageLabel, 1,6);
+        return gridPane;
+    }
     private GridPane footerBar(){
 
         Button addToCartButton = new Button("Add to Cart");
