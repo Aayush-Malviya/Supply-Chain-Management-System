@@ -4,15 +4,19 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 
 public class SupplyChain extends Application { //refractoring means renaming
@@ -26,6 +30,18 @@ public class SupplyChain extends Application { //refractoring means renaming
     String customerEmail = null;
     //Creating header bar
     private GridPane headerBar(){
+
+        //adding image
+        Image image = null;
+
+        try {
+            FileInputStream imageStream = new FileInputStream("D:\\DSA\\Project\\supply_chain_management_system\\images\\cart.png");
+            image = new Image(imageStream,65, 65, false, false);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        //-----------------------------------------------------------------
         TextField searchText = new TextField();
         Button searchButton = new Button("Search here");
         searchButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -58,6 +74,7 @@ public class SupplyChain extends Application { //refractoring means renaming
                 bodyPane.getChildren().clear();
                 bodyPane.getChildren().add(signUpPage());
                 signUpButton.setVisible(false);
+                globalLoginButton.setVisible(true);
             }
         });
         //----------------------------------------new code--------------------------------------------
@@ -65,16 +82,19 @@ public class SupplyChain extends Application { //refractoring means renaming
         customerEmailLabel = new Label("Welcome User");
         //adding search bar & button
         GridPane gridPane = new GridPane();
-        gridPane.setMinSize(bodyPane.getMinWidth(), headerBar-10);
-        gridPane.setVgap(5); //setting vertical gap between controls
+        gridPane.setMinSize(bodyPane.getMinWidth(), headerBar-20);
+        gridPane.setVgap(2); //setting vertical gap between controls
         gridPane.setHgap(5); //setting horizontal gap between controls
-        gridPane.setAlignment(Pos.CENTER); //to set controls to center
+      //  gridPane.setAlignment(Pos.CENTER); //to set controls to center
+        gridPane.setStyle("-fx-background-color: #0eb39d");
 
-        gridPane.add(searchText, 0, 0);
-        gridPane.add(searchButton, 1, 0);
-        gridPane.add(globalLoginButton, 60, 0 );
-        gridPane.add(customerEmailLabel, 61, 0);
-        gridPane.add(signUpButton, 60,1); //new code
+
+        gridPane.add(new ImageView(image), 1,0, 1, 2); //add(Node child,int columnIndex,int rowIndex,int colspan,int rowspan)
+        gridPane.add(searchText, 40, 0, 1,2);
+        gridPane.add(searchButton, 41, 0,1,2);
+        gridPane.add(globalLoginButton, 70, 0 );
+        gridPane.add(customerEmailLabel, 70, 1);
+        gridPane.add(signUpButton, 71,0); //new code
         return gridPane;
     }
 
@@ -129,7 +149,7 @@ public class SupplyChain extends Application { //refractoring means renaming
                         e.printStackTrace();
                     }
                     if(rowCount != 0){
-                        messageLabel.setText("Account Created SuccessFully");
+                        messageLabel.setText("Account Created SuccessFully, Login Now");
                     }
                     else
                         messageLabel.setText("Email already exits");
@@ -137,43 +157,59 @@ public class SupplyChain extends Application { //refractoring means renaming
             };
         });
 
+        //adding image
+        Image image = null;
+
+        try {
+            FileInputStream imageStream = new FileInputStream("D:\\DSA\\Project\\supply_chain_management_system\\images\\signUp.png");
+            image = new Image(imageStream,250, 100, false, false);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+
         GridPane gridPane = new GridPane();
         gridPane.setMinSize(bodyPane.getMinWidth(), bodyPane.getMinHeight());
         gridPane.setVgap(5); //setting vertical gap between controls
         gridPane.setHgap(5); //setting horizontal gap between controls
         gridPane.setStyle("-fx-background-color: #C0C0C0"); //setting background colour
-
+      //  gridPane.setStyle("-fx-background-image: url:("loginS.png");");
         gridPane.setAlignment(Pos.CENTER); //to set controls to center
 
+
+        //adding image position
+        gridPane.add(new ImageView(image), 0,0, 5, 1);
+
         //adding email box on panel
-        gridPane.add(emailLabel, 0, 0); //x, y
-        gridPane.add(emailTextField,1, 0 ); //x, y
+        gridPane.add(emailLabel, 0, 1); //x, y
+        gridPane.add(emailTextField,1, 1 ); //x, y
 
         //adding password field on panel
-        gridPane.add(passwordLabel, 0, 1); //x, y
-        gridPane.add(passwordField, 1, 1); //x, y
+        gridPane.add(passwordLabel, 0, 2); //x, y
+        gridPane.add(passwordField, 1, 2); //x, y
 
         //adding firstName position
-        gridPane.add(firstNameLabel,0, 2);
-        gridPane.add(firstNameTextField, 1,2);
+        gridPane.add(firstNameLabel,0, 3);
+        gridPane.add(firstNameTextField, 1,3);
 
         //adding lastName position
-        gridPane.add(lastNameLabel,0, 3);
-        gridPane.add(lastNameTextField, 1,3);
+        gridPane.add(lastNameLabel,0, 4);
+        gridPane.add(lastNameTextField, 1,4);
 
         //adding address position
-        gridPane.add(addressLabel,0, 4);
-        gridPane.add(addressTextField, 1,4);
+        gridPane.add(addressLabel,0, 5);
+        gridPane.add(addressTextField, 1,5);
 
         //adding mobile position
-        gridPane.add(mobileLabel,0, 5);
-        gridPane.add(mobileTextField, 1,5);
+        gridPane.add(mobileLabel,0, 6);
+        gridPane.add(mobileTextField, 1,6);
 
         //adding address position
-        gridPane.add(signUpButton,0, 6);
-        gridPane.add(messageLabel, 1,6);
+        gridPane.add(signUpButton,0, 7);
+        gridPane.add(messageLabel, 1,7);
         return gridPane;
     }
+
     private GridPane footerBar(){
 
         Button addToCartButton = new Button("Add to Cart");
@@ -228,6 +264,16 @@ public class SupplyChain extends Application { //refractoring means renaming
                     messageLabel.setText("Incorrect credentials");
             }
         });
+        //adding image
+        Image image = null;
+
+        try {
+            FileInputStream imageStream = new FileInputStream("D:\\DSA\\Project\\supply_chain_management_system\\images\\loginS.png");
+            image = new Image(imageStream,100, 100, false, false);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
 
         GridPane gridPane = new GridPane();
         gridPane.setMinSize(bodyPane.getMinWidth(), bodyPane.getMinHeight());
@@ -237,16 +283,19 @@ public class SupplyChain extends Application { //refractoring means renaming
 
         gridPane.setAlignment(Pos.CENTER); //to set controls to center
 
+        //adding image position
+        gridPane.add(new ImageView(image), 2,0);
+
         //adding email box on panel
-        gridPane.add(emailLabel, 0, 0); //x, y
-        gridPane.add(emailTextField,1, 0 ); //x, y
+        gridPane.add(emailLabel, 1, 3); //x, y
+        gridPane.add(emailTextField,2, 3 ); //x, y
 
         //adding password field on panel
-        gridPane.add(passwordLabel, 0, 1); //x, y
-        gridPane.add(passwordField, 1, 1); //x, y
+        gridPane.add(passwordLabel, 1, 5); //x, y
+        gridPane.add(passwordField, 2, 5); //x, y
         //adding button position
-        gridPane.add(loginButton,0, 2);
-        gridPane.add(messageLabel, 1,2);
+        gridPane.add(loginButton,1, 7);
+        gridPane.add(messageLabel, 2,7);
         return gridPane;
     }
     private Pane createContent(){
